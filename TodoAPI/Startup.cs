@@ -7,6 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 // Register the Database Context
 // Services like DB Context must be registered with the dependency injection (DI) container.
 // The container provides the service to controllers
+// Code Changes:
+// - Removed Used declerations
+// - Adds the database context to the DI Container
+// - Specifies that the database context will use an in-memory database
 using Microsoft.EntityFrameworkCore;
 using TodoAPI.Models;
 
