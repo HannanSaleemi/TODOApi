@@ -57,6 +57,20 @@ namespace TodoAPI.Controllers
 
         // POST: api/Todo
         // The method gets the value of the to-do item from the body of the HTTP request
+
+        // The CreatesAtAction method:
+            // Retunrs 201 if successful
+            // Adds a Location header to the responser. Specified the URL of the newly created to-do item
+            // References the GetTodoItem action to create the Location header URI. The C# nameof is used to avoud hard-coding the action name in the CreatesAtAction call.
+        
+        // Running POST in postman - You can set body to RAW adn select JSON
+        // Add the body:
+        // { "name":"Walk Dog", "isComplete": true }
+        // SEND
+        // You will see the newly created item
+        // You will also see the Location Header in the Headers tab - Pointing you back to the API response and id for that event
+        // You can send a GET request to the URL with the same ID and get the newly posted infromation again
+        
         [HttpPost]
         public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem item)
         {
@@ -65,5 +79,31 @@ namespace TodoAPI.Controllers
 
             return CreatedAtAction(nameof(GetTodoItem), new { id = item.Id }, item);
         }
+
+        // PUT api/Todo/5
+        // PUT request returnds 204 (No Content) - Used when required to update the whole entity, not just the chnages.
+        // Will get error if no item in the DB
+
+        // Testing it
+        // Create new Item - Call GET
+        // Then update the item with ID=1 (The one just created by the GET request)
+        // URL: localhost:5001/api/todo/1
+        // Body of PUT: { "ID":1, "name":"feed fish", "isComplete":true }
+        // No content will be outputted.
+        // Now GET Request on localhost:5001/api/todo/1 should show our new info
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutTodoItem(long id, TodoItem item)
+        {
+            if (id != item.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(item).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
     }
 }
