@@ -14,7 +14,7 @@ using TodoAPI.Models;
 
 namespace TodoAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/todo")]
     [ApiController]
     public class TodoController : ControllerBase
     {
@@ -53,6 +53,17 @@ namespace TodoAPI.Controllers
             }
 
             return todoItem;
+        }
+
+        // POST: api/Todo
+        // The method gets the value of the to-do item from the body of the HTTP request
+        [HttpPost]
+        public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem item)
+        {
+            _context.TodoItems.Add(item);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetTodoItem), new { id = item.Id }, item);
         }
     }
 }
